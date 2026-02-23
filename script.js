@@ -209,10 +209,11 @@ document.getElementById("feedbackForm").addEventListener("submit", function(e) {
   e.preventDefault();
 
   const nome = document.getElementById("nome").value;
-  const mensagem = document.getElementById("mensagem").value;
+  const mensagem = document.getElementById("comentario").value;
 
   const texto = `Feedback recebido:%0A%0ANome: ${nome}%0AMensagem: ${mensagem}`;
   const telefone = "+244924142392"; // seu número com DDI
 
   window.open(`https://wa.me/${telefone}?text=${texto}`, "_blank");
 });
+
