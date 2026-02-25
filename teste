@@ -1,0 +1,2806 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devs Chat - Rede para Desenvolvedores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5a52d5;
+            --primary-light: #8b85ff;
+            --secondary: #00D9A5;
+            --dark: #1a1a2e;
+            --dark-secondary: #16213e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--dark);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Login & Register Screens */
+        .auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-secondary) 50%, #0f0f23 100%);
+        }
+
+        .auth-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-hover);
+            color: var(--dark);
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-logo i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .auth-logo h1 {
+            font-size: 1.8rem;
+            color: var(--dark);
+        }
+
+        .auth-logo span {
+            color: var(--primary);
+        }
+
+        .auth-logo p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--light);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray);
+            color: var(--white);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--secondary), #00b894);
+            color: var(--white);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--gray);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--gray);
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-light);
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-size: 0.85rem;
+        }
+
+        /* Main App Layout */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .app-container.active {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--dark-secondary);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-logo i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .sidebar-logo h2 {
+            font-size: 1.4rem;
+        }
+
+        .sidebar-logo span {
+            color: var(--secondary);
+        }
+
+        .sidebar-menu {
+            flex: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .menu-item i {
+            font-size: 1.2rem;
+            width: 24px;
+        }
+
+        .menu-badge {
+            margin-left: auto;
+            background: var(--danger);
+            color: var(--white);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .user-profile-mini {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .user-info h4 {
+            font-size: 0.95rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 20px;
+        }
+
+        /* Header */
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--dark-secondary);
+            border-radius: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+        }
+
+        .header-title p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .header-btn:hover {
+            background: var(--primary);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Feed Screen */
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .feed-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .feed-filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--dark-secondary);
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .posts-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .post-card {
+            background: var(--dark-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .post-user-info h3 {
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verified-badge {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .post-user-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .post-user-info .premium-badge {
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+        }
+
+        .post-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .post-content p {
+            color: #b0b0b0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            background: rgba(108, 99, 255, 0.2);
+            color: var(--primary-light);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .post-link-preview {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-link-preview:hover {
+            background: rgba(108, 99, 255, 0.1);
+        }
+
+        .link-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .link-info h5 {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .link-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+        }
+
+        .action-btn.like:hover {
+            color: var(--danger);
+        }
+
+        /* Chat Screen */
+        .chat-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+            height: calc(100vh - 140px);
+        }
+
+        .chat-list {
+            background: var(--dark-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .chat-list-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .chat-search {
+            position: relative;
+        }
+
+        .chat-search input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 10px;
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .chat-search input::placeholder {
+            color: var(--gray);
+        }
+
+        .chat-search i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .chat-list-items {
+            height: calc(100% - 80px);
+            overflow-y: auto;
+        }
+
+        .chat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255,1);
+}
+
+    .chat-item:hover, .chat-item.active {
+        background: rgba(108, 99, 255, 0.1);
+    }
+
+    .chat-item-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        position: relative;
+    }
+
+    .online-indicator {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        background: var(--success);
+        border: 2px solid var(--dark-secondary);
+        border-radius: 50%;
+    }
+
+    .chat-item-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .chat-item-info h4 {
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .chat-item-info p {
+        font-size: 0.8rem;
+        color: var(--gray);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chat-item-time {
+        font-size: 0.75rem;
+        color: var(--gray);
+    }
+
+    .chat-item-unread {
+        background: var(--primary);
+        color: var(--white);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    /* Chat Window */
+    .chat-window {
+        background: var(--dark-secondary);
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-window-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .chat-window-user {
+        flex: 1;
+    }
+
+    .chat-window-user h3 {
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .chat-window-user p {
+        font-size: 0.8rem;
+        color: var(--success);
+    }
+
+    .chat-window-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .chat-window-actions button {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: var(--white);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .chat-window-actions button:hover {
+        background: var(--primary);
+    }
+
+    .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .message {
+        display: flex;
+        gap: 12px;
+        max-width: 70%;
+    }
+
+    .message.sent {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .message-content {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px 16px;
+        border-radius: 16px;
+        border-top-left-radius: 4px;
+    }
+
+    .message.sent .message-content {
+        background: var(--primary);
+        border-top-left-radius: 16px;
+        border-top-right-radius: 4px;
+    }
+
+    .message-content p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .message-time {
+        font-size: 0.7rem;
+        color: var(--gray);
+        margin-top: 5px;
+    }
+
+    .message.sent .message-time {
+        text-align: right;
+    }
+
+    .chat-input {
+        padding: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        gap: 12px;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        border-radius: 12px;
+        color: var(--white);
+        font-size: 0.95rem;
+    }
+
+    .chat-input input::placeholder {
+        color: var(--gray);
+    }
+
+    .chat-input button {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: var(--primary);
+        border: none;
+        color: var(--white);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+    }
+
+    .chat-input button:hover {
+        background: var(--primary-dark);
+        transform: scale(1.05);
+    }
+
+    /* Profile Screen */
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .profile-header {
+        background: var(--dark-secondary);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .profile-banner {
+        height: 150px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        position: relative;
+    }
+
+    .profile-premium-banner {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #f39c12, #e74c3c);
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .profile-info-section {
+        padding: 0 30px 30px;
+        position: relative;
+    }
+
+    .profile-avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        font-weight: 700;
+        margin-top: -60px;
+        border: 4px solid var(--dark-secondary);
+        position: relative;
+    }
+
+    .profile-edit-badge {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        background: var(--primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .profile-name-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 15px;
+    }
+
+    .profile-name-section h1 {
+        font-size: 1.8rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .profile-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .profile-actions button {
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-message {
+        background: var(--primary);
+        color: var(--white);
+    }
+
+    .btn-follow {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+    }
+
+    .profile-bio {
+        margin-top: 15px;
+        color: #b0b0b0;
+        line-height: 1.6;
+    }
+
+    .profile-stats {
+        display: flex;
+        gap: 40px;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-item h3 {
+        font-size: 1.5rem;
+        color: var(--primary);
+    }
+
+    .stat-item p {
+        font-size: 0.85rem;
+        color: var(--gray);
+    }
+
+    .profile-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .skill-tag {
+        padding: 8px 16px;
+        background: rgba(108, 99, 255, 0.2);
+        color: var(--primary-light);
+        border-radius: 8px;
+        font-size: 0.85rem;
+    }
+
+    .profile-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .link-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        color: var(--white);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .link-btn:hover {
+        background: var(--primary);
+    }
+
+    /* Projects Section */
+    .projects-section {
+        margin-top: 25px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .project-card {
+        background: var(--dark-secondary);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .project-image {
+        height: 150px;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--primary);
+    }
+
+    .project-info {
+        padding: 20px;
+    }
+
+    .project-info h3 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .project-info p {
+        font-size: 0.9rem;
+        color: var(--gray);
+        margin-bottom: 15px;
+    }
+
+    .project-tech {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .project-tech span {
+        padding: 4px 10px;
+        background: rgba(0, 217, 165, 0.2);
+        color: var(--secondary);
+        border-radius: 6px;
+        font-size: 0.75rem;
+    }
+
+    .project-stats-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .project-stat {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--gray);
+        font-size: 0.85rem;
+    }
+
+    /* Dev AI Screen */
+    .dev-ai-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .dev-ai-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .dev-ai-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 20px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.4); }
+        50% { box-shadow: 0 0 0 20px rgba(108, 99, 255, 0); }
+    }
+
+    .dev-ai-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .dev-ai-header p {
+        color: var(--gray);
+    }
+
+    .dev-ai-premium-prompt {
+        background: linear-gradient(135deg, rgba(243, 156, 18, 0.2), rgba(231, 76, 60, 0.2));
+        border: 1px solid rgba(243, 156, 18, 0.3);
+        border-radius: 16px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .dev-ai-premium-prompt h3 {
+        margin-bottom: 10px;
+        color: #f39c12;
+    }
+
+    .dev-ai-premium-prompt p {
+        color: #b0b0b0;
+        margin-bottom: 20px;
+    }
+
+    .ai-chat-container {
+        background: var(--dark-secondary);
+        border-radius: 20px;
+        overflow: hidden;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ai-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .ai-message {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .ai-avatar {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .ai-message-content {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px 20px;
+        border-radius: 16px;
+        border-top-left-radius: 4px;
+        max-width: 80%;
+    }
+
+    .ai-message-content pre {
+        background: #0d0d0d;
+        padding: 15px;
+        border-radius: 10px;
+        overflow-x: auto;
+        margin: 10px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+    }
+
+    .ai-message-content code {
+        background: #0d0d0d;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.85rem;
+    }
+
+    .ai-input-area {
+        padding: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        gap: 12px;
+    }
+
+    .ai-input-area input {
+        flex: 1;
+        padding: 14px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        border-radius: 12px;
+        color: var(--white);
+        font-size: 0.95rem;
+    }
+
+    .ai-input-area button {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        border: none;
+        color: var(--white);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .ai-input-area button:hover {
+        transform: scale(1.05);
+    }
+
+    /* Premium Screen */
+    .premium-screen {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .premium-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .premium-badge-large {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #f39c12, #e74c3c);
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+            .premium-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .premium-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .pricing-card {
+            background: var(--dark-secondary);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pricing-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(108, 99, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0 auto 20px;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .pricing-card .price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+
+        .pricing-features {
+            list-style: none;
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #b0b0b0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li i {
+            color: var(--success);
+        }
+
+        .pricing-features li.disabled {
+            opacity: 0.5;
+        }
+
+        .pricing-features li.disabled i {
+            color: var(--danger);
+        }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-premium {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-premium:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* Premium Features Section */
+        .premium-features {
+            background: var(--dark-secondary);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 50px;
+        }
+
+        .premium-features h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.8rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(108, 99, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+
+        .feature-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-item p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Users Grid */
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .user-card {
+            background: var(--dark-secondary);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .user-card-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+
+        .user-card h3 {
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .user-card .role {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .user-card p {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .user-card-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .user-card-skills span {
+            padding: 4px 10px;
+            background: rgba(108, 99, 255, 0.2);
+            color: var(--primary-light);
+            border-radius: 6px;
+            font-size: 0.75rem;
+        }
+
+        .user-card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .user-card-actions button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-connect {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-profile-view {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--dark-secondary);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+                padding: 15px;
+            }
+
+            .sidebar-logo h2, .menu-item span, .user-info, .logout-btn span {
+                display: none;
+            }
+
+            .sidebar-logo {
+                justify-content: center;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 14px;
+            }
+
+            .menu-badge {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+
+            .user-profile-mini {
+                justify-content: center;
+            }
+
+            .main-content {
+                margin-left: 80px;
+            }
+
+            .chat-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-list {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+            }
+
+            .profile-name-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .profile-actions {
+                width: 100%;
+            }
+
+            .profile-actions button {
+                flex: 1;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--dark-secondary);
+            padding: 16px 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow-hover);
+            animation: toastSlide 0.3s ease;
+            min-width: 300px;
+        }
+
+        @keyframes toastSlide {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast-icon {
+            font-size: 1.2rem;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--danger);
+        }
+
+        .toast.info .toast-icon {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="auth-screen active">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <i class="fas fa-code"></i>
+                <h1>Devs<span>Chat</span></h1>
+                <p>Conecte-se com desenvolvedores de todo o mundo</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+            </form>
+
+            <div class="divider"><span>ou continue com</span></div>
+
+            <button class="btn btn-secondary">
+                <i class="fab fa-github"></i>
+                GitHub
+            </button>
+
+            <div class="auth-footer">
+                Não tem uma conta? <a href="#" onclick="showScreen('registerScreen')">Cadastre-se</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Screen -->
+    <div id="registerScreen" class="auth-screen">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <i class="fas fa-code"></i>
+                <h1>Devs<span>Chat</span></h1>
+                <p>Crie sua conta e comece a conectar</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome</label>
+                        <input type="text" id="registerName" placeholder="Seu nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Sobrenome</label>
+                        <input type="text" id="registerLastName" placeholder="Seu sobrenome" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="seu@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="registerPassword" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Cargo</label>
+                    <select id="registerRole" required>
+                        <option value="">Selecione seu cargo</option>
+                        <option value="frontend">Desenvolvedor Frontend</option>
+                        <option value="backend">Desenvolvedor Backend</option>
+                        <option value="fullstack">Desenvolvedor Full Stack</option>
+                        <option value="mobile">Desenvolvedor Mobile</option>
+                        <option value="devops">DevOps Engineer</option>
+                        <option value="data">Data Scientist</option>
+                        <option value="ui">UI/UX Designer</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    Criar Conta
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Já tem uma conta? <a href="#" onclick="showScreen('loginScreen')">Entrar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="appContainer" class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-code"></i>
+                <h2>Devs<span>Chat</span></h2>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-item active" data-screen="feed" onclick="navigateTo('feed')">
+                    <i class="fas fa-home"></i>
+                    <span>Feed</span>
+                </div>
+                <div class="menu-item" data-screen="discover" onclick="navigateTo('discover')">
+                    <i class="fas fa-users"></i>
+                    <span>Descobrir</span>
+                </div>
+                <div class="menu-item" data-screen="chat" onclick="navigateTo('chat')">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversas</span>
+                    <span class="menu-badge">3</span>
+                </div>
+                <div class="menu-item" data-screen="projects" onclick="navigateTo('projects')">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Projetos</span>
+                </div>
+                <div class="menu-item" data-screen="devai" onclick="navigateTo('devai')">
+                    <i class="fas fa-robot"></i>
+                    <span>Dev AI</span>
+                    <span class="menu-badge">PRO</span>
+                </div>
+                <div class="menu-item" data-screen="profile" onclick="navigateTo('profile')">
+                    <i class="fas fa-user"></i>
+                    <span>Perfil</span>
+                </div>
+                <div class="menu-item" data-screen="premium" onclick="navigateTo('premium')">
+                    <i class="fas fa-crown"></i>
+                                        <span>Premium</span>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-mini">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-info">
+                        <h4>João Dev</h4>
+                        <p>Full Stack</p>
+                    </div>
+                    <button class="logout-btn" onclick="logout()" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Feed Screen -->
+            <section id="feedScreen" class="screen active">
+                <div class="main-header">
+                    <div class="header-title">
+                        <h1>Feed</h1>
+                        <p>Veja as últimas publicações da comunidade</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn" title="Notificações">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge">5</span>
+                        </button>
+                        <button class="header-btn" title="Nova Publicação" onclick="openModal('postModal')">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="feed-header">
+                    <h2>Publicações Recentes</h2>
+                    <div class="feed-filters">
+                        <button class="filter-btn active">Todos</button>
+                        <button class="filter-btn">Projetos</button>
+                        <button class="filter-btn">Vagas</button>
+                        <button class="filter-btn">Artigos</button>
+                    </div>
+                </div>
+
+                <div class="posts-grid">
+                    <!-- Post 1 -->
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-avatar">MR</div>
+                            <div class="post-user-info">
+                                <h3>Maria Rodrigues <i class="fas fa-check-circle verified-badge"></i></h3>
+                                <p>Full Stack Developer • 2h atrás</p>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <h4>🚀 Lançando meu novo projeto: DevJobs!</h4>
+                            <p>Acabei de finalizar minha plataforma de vagas exclusivas para desenvolvedores. Feito com React, Node.js e PostgreSQL. O que acham?</p>
+                            <div class="post-tags">
+                                <span class="tag">#react</span>
+                                <span class="tag">#nodejs</span>
+                                <span class="tag">#webdev</span>
+                            </div>
+                            <div class="post-link-preview">
+                                <div class="link-icon"><i class="fas fa-external-link-alt"></i></div>
+                                <div class="link-info">
+                                    <h5>devjobs.com.br</h5>
+                                    <p>Plataforma de vagas para devs</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn like"><i class="far fa-heart"></i> 124</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> 32</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Compartilhar</button>
+                        </div>
+                    </div>
+
+                    <!-- Post 2 - Premium -->
+                    <div class="post-card" style="border: 1px solid rgba(243, 156, 18, 0.3);">
+                        <div class="post-header">
+                            <div class="post-avatar" style="background: linear-gradient(135deg, #f39c12, #e74c3c);">PC</div>
+                            <div class="post-user-info">
+                                <h3>Pedro Costa <span class="premium-badge">PRO</span></h3>
+                                <p>Backend Developer • 5h atrás</p>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <h4>💻 Novo portfólio interativo lançado!</h4>
+                            <p>Finalmente terminei meu portfólio com demos ao vivo dos meus projetos. Acessem e me deem feedback!</p>
+                            <div class="post-tags">
+                                <span class="tag">#portfolio</span>
+                                <span class="tag">#javascript</span>
+                            </div>
+                            <div class="post-link-preview" style="border-color: rgba(243, 156, 18, 0.3);">
+                                <div class="link-icon" style="background: linear-gradient(135deg, #f39c12, #e74c3c);"><i class="fas fa-globe"></i></div>
+                                <div class="link-info">
+                                    <h5>pedrocosta.dev</h5>
+                                    <p>Meu portfólio profissional</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn like"><i class="far fa-heart"></i> 89</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> 18</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Compartilhar</button>
+                        </div>
+                    </div>
+
+                    <!-- Post 3 -->
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-avatar">AS</div>
+                            <div class="post-user-info">
+                                <h3>Ana Silva</h3>
+                                <p>UI/UX Designer • 1 dia atrás</p>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <h4>🎨 Dicas para um portfólio de desenvolvedor</h4>
+                            <p>Depois de avaliar hundreds de portfólios, aqui estão minhas principais dicas:</p>
+                            <p>1. Seja objetivo<br>
+                            2. Mostre código real<br>
+                            3. Conte a história do projeto<br>
+                            4. Mobile-first é essencial</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn like"><i class="far fa-heart"></i> 256</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> 45</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Compartilhar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Discover Screen -->
+            <section id="discoverScreen" class="screen">
+                <div class="main-header">
+                    <div class="header-title">
+                        <h1>Descobrir Desenvolvedores</h1>
+                        <p>Encontre profissionais para seus projetos</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="users-grid">
+                    <!-- User Card 1 -->
+                    <div class="user-card">
+                        <div class="user-card-avatar">JL</div>
+                        <h3>Juliano Lima <i class="fas fa-check-circle verified-badge"></i></h3>
+                        <p class="role">Senior Developer</p>
+                        <p>5 anos de experiência. Apaixonado por React eNode.js</p>
+                        <div class="user-card-skills">
+                            <span>React</span>
+                            <span>Node.js</span>
+                            <span>TypeScript</span>
+                        </div>
+                        <div class="user-card-actions">
+                            <button class="btn-connect"><i class="fas fa-user-plus"></i> Conectar</button>
+                            <button class="btn-profile-view"><i class="fas fa-envelope"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- User Card 2 -->
+                    <div class="user-card">
+                        <div class="user-card-avatar" style="background: linear-gradient(135deg, #00D9A5, #00b894);">RP</div>
+                        <h3>Raquel Pereira <span class="premium-badge">PRO</span></h3>
+                        <p class="role">Full Stack Developer</p>
+                        <p>Especialista em sistemas distribuídos e microsserviços</p>
+                        <div class="user-card-skills">
+                            <span>Python</span>
+                            <span>Docker</span>
+                            <span>AWS</span>
+                            <span>Kubernetes</span>
+                        </div>
+                        <div class="user-card-actions">
+                            <button class="btn-connect"><i class="fas fa-user-plus"></i> Conectar</button>
+                            <button class="btn-profile-view"><i class="fas fa-envelope"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- User Card 3 -->
+                    <div class="user-card">
+                        <div class="user-card-avatar" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">FM</div>
+                        <h3>Fernando Martins</h3>
+                        <p class="role">Mobile Developer</p>
+                        <p>Apps nativos e híbridos para iOS e Android</p>
+                        <div class="user-card-skills">
+                            <span>Flutter</span>
+                            <span>React Native</span>
+                            <span>Swift</span>
+                        </div>
+                        <div class="user-card-actions">
+                            <button class="btn-connect"><i class="fas fa-user-plus"></i> Conectar</button>
+                            <button class="btn-profile-view"><i class="fas fa-envelope"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- User Card 4 -->
+                    <div class="user-card">
+                        <div class="user-card-avatar" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">BT</div>
+                        <h3>Bruna Torres <i class="fas fa-check-circle verified-badge"></i></h3>
+                        <p class="role">DevOps Engineer</p>
+                        <p>Automação, CI/CD e infraestrutura como código</p>
+                        <div class="user-card-skills">
+                            <span>Terraform</span>
+                            <span>Jenkins</span>
+                            <span>Linux</span>
+                        </div>
+                        <div class="user-card-actions">
+                            <button class="btn-connect"><i class="fas fa-user-plus"></i> Conectar</button>
+                            <button class="btn-profile-view"><i class="fas fa-envelope"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Screen -->
+            <section id="chatScreen" class="screen">
+                <div class="main-header">
+                    <div class="header-title">
+                        <h1>Mensagens</h1>
+                        <p>Suas conversas</p>
+                    </div>
+                </div>
+
+                <div class="chat-layout">
+                    <div class="chat-list">
+                        <div class="chat-list-header">
+                            <div class="chat-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Buscar conversas...">
+                            </div>
+                        </div>
+                        <div class="chat-list-items">
+                            <div class="chat-item active">
+                                <div class="chat-item-avatar">
+                                    MR
+                                    <span class="online-indicator"></span>
+                                </div>
+                                <div class="chat-item-info">
+                                    <h4>Maria Rodrigues</h4>
+                                    <p>Vamos trabalhar juntos no projeto!</p>
+                                </div>
+                                <div class="chat-item-time">2m</div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-item-avatar">PC</div>
+                                <div class="chat-item-info">
+                                    <h4>Pedro Costa</h4>
+                                    <p>Ótimo trabalho no código!</p>
+                                </div>
+                                <div class="chat-item-time">1h</div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-item-avatar" style="background: linear-gradient(135deg, #00D9A5, #00b894);">
+                                    RP
+                                </div>
+                                <div class="chat-item-info">
+                                    <h4>Raquel Pereira</h4>
+                                    <p>Você viu minha proposta?</p>
+                                </div>
+                                <div class="chat-item-unread">2</div>
+                            </div>
+                            <div class="chat-item">
+                                <div class="chat-item-avatar">AS</div>
+                                <div class="chat-item-info">
+                                    <h4>Ana Silva</h4>
+                                    <p>O design está pronto!</p>
+                                </div>
+                                <div class="chat-item-time">3h</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-window">
+                        <div class="chat-window-header">
+                            <div class="chat-item-avatar" style="width: 45px; height: 45px; font-size: 1rem;">
+                                MR
+                                <span class="online-indicator"></span>
+                            </div>
+                            <div class="chat-window-user">
+                                <h3>Maria Rodrigues <i class="fas fa-check-circle verified-badge"></i></h3>
+                                <p>Online</p>
+                            </div>
+                            <div class="chat-window-actions">
+                                <button><i class="fas fa-phone"></i></button>
+                                <button><i class="fas fa-video"></i></button>
+                                <button><i class="fas fa-ellipsis-v"></i></button>
+                            </div>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="message">
+                                <div class="message-avatar">MR</div>
+                                <div class="message-content">
+                                    <p>Oi João! Vi seu perfil, muito legal seus projetos! 👋</p>
+                                    <div class="message-time">10:30</div>
+                                </div>
+                            </div>
+                            <div class="message sent">
+                                <div class="message-avatar">JD</div>
+                                <div class="message-content">
+                                    <p>Obrigado Maria! Gostou dos projetos? Estou buscando oportunidades para colaborar!</p>
+                                    <div class="message-time">10:32</div>
+                                </div>
+                            </div>
+                            <div class="message">
+                                <div class="message-avatar">MR</div>
+                                <div class="message-content">
+                                    <p>Sim! Tenho um projeto de uma plataforma educacional que preciso de ajuda. Você teria interesse?</p>
+                                    <div class="message-time">10:35</div>
+                                </div>
+                            </div>
+                            <div class="message sent">
+                                <div class="message-avatar">JD</div>
+                                <div class="message-content">
+                                    <p>Com certeza! Me conta mais sobre o projeto</p>
+                                    <div class="message-time">10:36</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <button><i class="fas fa-paperclip"></i></button>
+                            <input type="text" placeholder="Digite sua mensagem...">
+                            <button><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dev AI Screen -->
+            <section id="devaiScreen" class="screen">
+                <div class="dev-ai-container">
+                    <div class="dev-ai-header">
+                        <div class="dev-ai-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h1>Dev AI</h1>
+                        <p>Seu assistente de programação inteligente</p>
+                    </div>
+
+                    <div class="dev-ai-premium-prompt">
+                        <h3><i class="fas fa-crown"></i> Upgrade para Premium</h3>
+                        <p>Desbloqueie o Dev AI e tenha acesso ilimitado ao assistente de programação mais inteligente do mercado.</p>
+                        <button class="btn btn-primary" style="max-width: 250px; margin: 0 auto;" onclick="navigateTo('premium')">
+                            <i class="fas fa-rocket"></i> Ver Planos Premium
+                        </button>
+                    </div>
+
+                    <div class="ai-chat-container">
+                        <div class="ai-messages">
+                            <div class="ai-message">
+                                <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+                                <div class="ai-message-content">
+                                    <p>Olá! Sou o Dev AI, seu assistente de programação. Com o Premium, posso ajudá-lo com:</p>
+                                    <ul style="margin-top: 10px; margin-left: 20px;">
+                                        <li>🤖 Código em qualquer linguagem</li>
+                                        <li>🔍 Debugging e otimização</li>
+                                        <li>📚 Explicações de conceitos</li>
+                                        <li>💡 Boas práticas e padrões</li>
+                                  <div class="profile-actions">
+                                    <button class="btn-message"><i class="fas fa-envelope"></i> Mensagem</button>
+                                    <button class="btn-follow"><i class="fas fa-user-plus"></i> Seguir</button>
+                                </div>
+                            </div>
+
+                            <p class="profile-bio">
+                                Desenvolvedor Full Stack com 5 anos de experiência. Apaixonado por criar soluções inovadoras e ajudar outros desenvolvedores. Sempre aprendiendo novas tecnologias!
+                            </p>
+
+                            <div class="profile-stats">
+                                <div class="stat-item">
+                                    <h3>127</h3>
+                                    <p>Seguidores</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3>89</h3>
+                                    <p>Seguindo</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3>34</h3>
+                                    <p>Projetos</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h3>12</h3>
+                                    <p>Projetos Concluídos</p>
+                                </div>
+                            </div>
+
+                            <div class="profile-skills">
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">TypeScript</span>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">Docker</span>
+                                <span class="skill-tag">AWS</span>
+                            </div>
+
+                            <div class="profile-links">
+                                <a href="#" class="link-btn"><i class="fab fa-github"></i> github.com/joaodev</a>
+                                <a href="#" class="link-btn"><i class="fab fa-linkedin"></i> linkedin.com/in/joaodev</a>
+                                <a href="#" class="link-btn"><i class="fas fa-globe"></i> joaodev.com.br</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="projects-section">
+                        <div class="section-header">
+                            <h2>Meus Projetos</h2>
+                            <button class="btn btn-primary" style="width: auto; padding: 10px 20px;" onclick="openModal('projectModal')">
+                                <i class="fas fa-plus"></i> Novo Projeto
+                            </button>
+                        </div>
+                        <div class="projects-grid">
+                            <div class="project-card">
+                                <div class="project-image"><i class="fas fa-store"></i></div>
+                                <div class="project-info">
+                                    <h3>E-commerce API</h3>
+                                    <p>API RESTful para loja virtual com autenticação, pagamentos e painel admin.</p>
+                                    <div class="project-tech">
+                                        <span>Node.js</span>
+                                        <span>Express</span>
+                                        <span>MongoDB</span>
+                                    </div>
+                                    <div class="project-stats-row">
+                                        <div class="project-stat"><i class="fas fa-star"></i> 45</div>
+                                        <div class="project-stat"><i class="fas fa-code-branch"></i> 12</div>
+                                        <div class="project-stat"><i class="fas fa-eye"></i> 234</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="project-card">
+                                <div class="project-image" style="background: linear-gradient(135deg, #61dafb, #21a1f1);">
+                                    <i class="fab fa-react"></i>
+                                </div>
+                                <div class="project-info">
+                                    <h3>Task Manager App</h3>
+                                    <p>Aplicativo de gerenciamento de tarefas com tempo real e notificações.</p>
+                                    <div class="project-tech">
+                                        <span>React</span>
+                                        <span>Firebase</span>
+                                        <span>Redux</span>
+                                    </div>
+                                    <div class="project-stats-row">
+                                        <div class="project-stat"><i class="fas fa-star"></i> 78</div>
+                                        <div class="project-stat"><i class="fas fa-code-branch"></i> 23</div>
+                                        <div class="project-stat"><i class="fas fa-eye"></i> 567</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Premium Screen -->
+            <section id="premiumScreen" class="screen">
+                <div class="premium-screen">
+                    <div class="premium-header">
+                        <div class="premium-badge-large">
+                            <i class="fas fa-crown"></i> PREMIUM
+                        </div>
+                        <h1>Desbloqueie o Potencial Completo</h1>
+                        <p>Tenha acesso a recursos exclusivos para turbinar sua carreira como desenvolvedor</p>
+                    </div>
+
+                    <div class="pricing-grid">
+                        <!-- Plano Grátis -->
+                        <div class="pricing-card">
+                            <div class="pricing-icon" style="background: rgba(108, 99, 255, 0.2);">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3>Grátis</h3>
+                            <div class="price">R$ 0<span>/mês</span></div>
+                            <ul class="pricing-features">
+                                <li><i class="fas fa-check"></i> Perfil básico</li>
+                                <li><i class="fas fa-check"></i> Conexões ilimitadas</li>
+                                <li><i class="fas fa-check"></i> Feed de publicações</li>
+                                <li><i class="fas fa-check"></i> Chat com desenvolvedores</li>
+                                <li><i class="fas fa-times" style="color: var(--danger);"></i> Portfólio online</li>
+                                <li class="disabled"><i class="fas fa-times" style="color: var(--danger);"></i> Dev AI</li>
+                                <li class="disabled"><i class="fas fa-times" style="color: var(--danger);"></i> Projetos em destaque</li>
+                            </ul>
+                            <button class="pricing-btn btn-outline-premium">Plano Atual</button>
+                        </div>
+
+                        <!-- Plano Premium -->
+                        <div class="pricing-card featured">
+                            <div class="pricing-badge">Mais Popular</div>
+                            <div class="pricing-icon" style="background: linear-gradient(135deg, #f39c12, #e74c3c);">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3>Premium</h3>
+                            <div class="price">R$ 29,90<span>/mês</span></div>
+                            <ul class="pricing-features">
+                                <li><i class="fas fa-check"></i> Tudo do plano grátis</li>
+                                <li><i class="fas fa-check"></i> Portfólio online profissional</li>
+                                <li><i class="fas fa-check"></i> Publicar links de sites</li>
+                                <li><i class="fas fa-check"></i> <strong>Dev AI ilimitado</strong></li>
+                                <li><i class="fas fa-check"></i> Projetos em destaque</li>
+                                <li><i class="fas fa-check"></i> Selo verificado</li>
+                                <li><i class="fas fa-check"></i> Suporte prioritário</li>
+                            </ul>
+                            <button class="pricing-btn btn-primary">
+                                <i class="fas fa-rocket"></i> Assinar Agora
+                            </button>
+                        </div>
+
+                        <!-- Plano Anual -->
+                        <div class="pricing-card">
+                            <div class="pricing-icon" style="background: linear-gradient(135deg, #00D9A5, #00b894);">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3>Anual</h3>
+                            <div class="price">R$ 249,90<span>/ano</span></div>
+                            <p style="color: var(--success); margin-bottom: 20px;">Equivale a R$ 20,80/mês</p>
+                            <ul class="pricing-features">
+                                <li><i class="fas fa-check"></i> Tudo do Premium</li>
+                                <li><i class="fas fa-check"></i> 2 meses gratuitos</li>
+                                <li><i class="fas fa-check"></i> Destaque no feed</li>
+                                <li><i class="fas fa-check"></i> Badge exclusivo</li>
+                                <li><i class="fas fa-check"></i> Mentoria mensal</li>
+                                <li><i class="fas fa-check"></i> Acesso antecipado</li>
+                            </ul>
+                            <button class="pricing-btn btn-success">
+                                <i class="fas fa-fire"></i> Melhor Valor
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="premium-features">
+                        <h2>Recursos Exclusivos Premium</h2>
+                        <div class="features-grid">
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fas fa-globe"></i></div>
+                                <h4>Portfólio Online</h4>
+                                <p>Publique seus sites e projetos diretamente no seu perfil. Customize e mostre seu trabalho ao mundo.</p>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                                <h4>Dev AI</h4>
+                                <p>Acesso ilimitado ao assistente de IA especializado em programação. Tire dúvidas, peça ajuda com código e muito mais.</p>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fas fa-star"></i></div>
+                                <h4>Projetos em Destaque</h4>
+                                <p>Seus projetos aparecem no topo do feed e têm maior visibilidade para potenciais empregadores e colaboradores.</p>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                                <h4>Selo Verificado</h4>
+                                <p>Obtenha o badge de desenvolvedor verificado e conquiste mais credibilidade na plataforma.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Post Modal -->
+    <div id="postModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Nova Publicação</h2>
+                <button class="modal-close" onclick="closeModal('postModal')">&times;</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" placeholder="Título da sua publicação">
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo</label>
+                    <textarea rows="5" placeholder="O que você quer compartilhar?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Link (Premium)</label>
+                    <input type="url" placeholder="https://seusite.com.br" disabled>
+                    <small style="color: var(--gray);">Disponível no plano Premium</small>
+                </div>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <input type="text" placeholder="#javascript #react">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Publicar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Novo Projeto</h2>
+                <button class="modal-close" onclick="closeModal('projectModal')">&times;</button>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label>Nome do Projeto</label>
+                    <input type="text" placeholder="Nome do seu projeto">
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea rows="4" placeholder="Descreva seu projeto..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select>
+                            <option>Website</option>
+                            <option>Aplicativo</option>
+                            <option>API</option>
+                            <option>Biblioteca</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Link</label>
+                        <input type="url" placeholder="https://github.com/...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tecnologias</label>
+                    <input type="text" placeholder="React, Node.js, MongoDB">
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Criar Projeto
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.auth-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function navigateTo(screenId) {
+            // Update sidebar active state
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-screen="${screenId}"]`).classList.add('active');
+
+            // Show screen
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId + 'Screen').classList.add('active');
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        // Login Form
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Simulate login
+            if(email && password) {
+                showToast('Login realizado com sucesso!', 'success');
+                setTimeout(() => {
+                    document.getElementById('loginScreen').classList.remove('active');
+                    document.getElementById('appContainer').classList.add('active');
+                }, 1000);
+            }
+        });
+
+        // Register Form
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            
+            // Simulate registration
+            showToast(`Bem-vindo(a), ${name}! Conta criada com sucesso!`, 'success');
+            setTimeout(() => {
+                showScreen('loginScreen');
+            }, 1500);
+        });
+
+        // Logout
+        function logout() {
+            if(confirm('Deseja realmente sair?')) {
+                document.getElementById('appContainer').classList.remove('active');
+                document.getElementById('loginScreen').classList.add('active');
+                showToast('Logout realizado com sucesso!', 'info');
+            }
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            let icon = '';
+            switch(type) {
+                case 'success': icon = '✓'; break;
+                case 'error': icon = '✕'; break;
+                case 'info': icon = 'ℹ'; break;
+            }
+            
+            toast.innerHTML = `
+                <span class="toast-icon">${icon}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Like button toggle
+        document.querySelectorAll('.action-btn.like').forEach(btn => {
+   // Chat send message
+document.querySelector('.chat-input input').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+        const message = this.value;
+        if(message.trim()) {
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message sent';
+            userMessage.innerHTML = `
+                <div class="message-avatar">JD</div>
+                <div class="message-content">
+                    <p>${message}</p>
+                    <div class="message-time">${new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</div>
+                </div>
+            `;
+            chatMessages.appendChild(userMessage);
+            this.value = '';
+            
+            // Simulate response
+            setTimeout(() => {
+                const responseMessage = document.createElement('div');
+                responseMessage.className = 'message';
+                responseMessage.innerHTML = `
+                    <div class="message-avatar">MR</div>
+                    <div class="message-content">
+                        <p>Que legal! Vamos conversar mais sobre isso. 😊</p>
+                        <div class="message-time">${new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</div>
+                    </div>
+                `;
+                chatMessages.appendChild(responseMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+});
+
+// Chat send button
+document.querySelector('.chat-input button').addEventListener('click', function() {
+    const input = document.querySelector('.chat-input input');
+    input.dispatchEvent(new Event('keypress'));
+});
+
+// Premium plan buttons
+document.querySelectorAll('.pricing-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        if(this.textContent.includes('Assinar') || this.textContent.includes('Melhor Valor')) {
+            showToast('Redirecionando para pagamento...', 'info');
+            setTimeout(() => {
+                showToast('Pagamento simulado realizado com sucesso!', 'success');
+                document.querySelector('.premium-badge-large').style.display = 'inline-flex';
+                document.querySelectorAll('.premium-badge').forEach(badge => {
+                    badge.style.display = 'inline';
+                });
+            }, 2000);
+        }
+    });
+});
+
+// Form submission handlers
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        showToast('Processando...', 'info');
+    });
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // ESC to close modals
+    if(e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+            modal.classList.remove('active');
+        });
+    }
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Devs Chat loaded successfully!');
+    
+    // Show welcome toast
+    setTimeout(() => {
+        showToast('Bem-vindo ao Devs Chat! 🚀', 'info');
+    }, 1000);
+});
+    </script>
+</body>
+</html>
